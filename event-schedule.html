@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch Nhân Sự Event — Tháng 5 & 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --ink: #1A1410;
+    --gold: #C9A84C;
+    --gold-light: #E8D49A;
+    --rust: #C0533A;
+    --sage: #5A7A65;
+    --slate: #3D4F6B;
+    --mauve: #8B6B7A;
+    --border: #D8CFC4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 24px 60px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .header::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--gold);
+    margin: 0 auto 20px;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .header-title span {
+    color: var(--rust);
+  }
+
+  .header-sub {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #7A6F65;
+    font-weight: 400;
+  }
+
+  .header::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 20px auto 0;
+  }
+
+  /* ── MONTH TABS ── */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+
+  .tab {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 10px 28px;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    cursor: pointer;
+    background: white;
+    color: #9A8F85;
+    transition: all 0.25s;
+    user-select: none;
+  }
+
+  .tab.active, .tab:hover {
+    background: var(--ink);
+    color: var(--gold-light);
+    border-color: var(--ink);
+  }
+
+  /* ── BRAND COLOR MAP ── */
+  /* assigned dynamically via JS */
+
+  /* ── TABLE WRAPPER ── */
+  .table-outer {
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 48px rgba(26,20,16,0.10);
+    border: 1px solid var(--border);
+    background: white;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  /* ── THEAD ── */
+  thead tr:first-child {
+    background: var(--ink);
+  }
+
+  thead tr:first-child th {
+    color: var(--gold-light);
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 18px 16px;
+    font-weight: 700;
+    text-align: left;
+    border: none;
+  }
+
+  thead tr:first-child th:first-child {
+    width: 120px;
+    min-width: 100px;
+  }
+
+  thead tr.week-row th {
+    background: #F5F1EB;
+    color: #9A8F85;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── TBODY ── */
+  tbody tr {
+    border-bottom: 1px solid #EEE8E1;
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #FDFAF6; }
+
+  /* Brand name cell */
+  .brand-cell {
+    padding: 16px 16px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-right: 2px solid var(--border);
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1;
+  }
+
+  tbody tr:hover .brand-cell { background: #FDFAF6; }
+
+  .brand-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Date cells */
+  td.day-cell {
+    padding: 10px 8px;
+    vertical-align: top;
+    min-width: 80px;
+    max-width: 100px;
+    border-right: 1px solid #EEE8E1;
+  }
+
+  td.day-cell:last-child { border-right: none; }
+
+  /* Weekend shade */
+  td.weekend {
+    background: #F9F5EE;
+  }
+
+  tbody tr:hover td.weekend { background: #F5EFE5; }
+
+  /* Event chips */
+  .event-chip {
+    display: block;
+    border-radius: 6px;
+    padding: 5px 8px;
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+    position: relative;
+  }
+
+  .event-chip:last-child { margin-bottom: 0; }
+
+  .event-chip:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+
+  .event-chip .chip-name {
+    display: block;
+    font-weight: 600;
+  }
+
+  .event-chip .chip-staff {
+    display: block;
+    font-size: 10px;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+
+  /* Empty day */
+  .day-empty {
+    color: #D0C8BE;
+    font-size: 11px;
+    text-align: center;
+    padding-top: 8px;
+  }
+
+  /* ── DATE HEADER ROW ── */
+  .date-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9A8F85;
+    margin-bottom: 4px;
+  }
+
+  .today-marker {
+    display: inline-block;
+    background: var(--rust);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    max-width: 1200px;
+    margin: 24px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .legend-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9A8F85;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  /* ── SUMMARY CARDS ── */
+  .summary {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .summary-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 12px rgba(26,20,16,0.05);
+    transition: transform 0.2s;
+  }
+
+  .summary-card:hover { transform: translateY(-2px); }
+
+  .summary-card-brand {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #9A8F85;
+  }
+
+  .summary-card-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .summary-card-label {
+    font-size: 12px;
+    color: #7A6F65;
+  }
+
+  /* ── ADD EVENT MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,20,16,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 20px;
+    padding: 36px 32px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: 0 24px 80px rgba(26,20,16,0.25);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+
+  .modal-field {
+    margin-bottom: 16px;
+  }
+
+  .modal-field label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #9A8F85;
+    margin-bottom: 6px;
+  }
+
+  .modal-field input,
+  .modal-field select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .modal-field input:focus,
+  .modal-field select:focus { border-color: var(--gold); }
+
+  .modal-row { display: flex; gap: 12px; }
+  .modal-row .modal-field { flex: 1; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--gold-light);
+  }
+
+  .btn-primary:hover { background: #2D2520; }
+
+  .btn-secondary {
+    background: #F0EBE4;
+    color: var(--ink);
+  }
+
+  .btn-secondary:hover { background: #E5DDD5; }
+
+  /* ── ADD BUTTON ── */
+  .add-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--gold-light);
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(26,20,16,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    z-index: 50;
+  }
+
+  .add-btn:hover { transform: scale(1.1); background: var(--rust); }
+
+  /* ── STAFF PILLS (edit event detail) ── */
+  .staff-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .staff-tag {
+    background: #F0EBE4;
+    border-radius: 50px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── TOOLTIP ── */
+  .tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  .event-chip:hover .tooltip { display: block; }
+
+  /* fade-in */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  tbody tr { animation: fadeIn 0.4s ease both; }
+  tbody tr:nth-child(1) { animation-delay: 0.05s; }
+  tbody tr:nth-child(2) { animation-delay: 0.10s; }
+  tbody tr:nth-child(3) { animation-delay: 0.15s; }
+  tbody tr:nth-child(4) { animation-delay: 0.20s; }
+  tbody tr:nth-child(5) { animation-delay: 0.25s; }
+  tbody tr:nth-child(6) { animation-delay: 0.30s; }
+
+  /* scroll hint */
+  .scroll-hint {
+    text-align: center;
+    font-size: 11px;
+    color: #B0A89F;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 24px 12px 80px; }
+    .modal { padding: 24px 18px; }
+    .add-btn { bottom: 20px; right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Agency Event Schedule</div>
+  <div class="header-title">Lịch Nhân Sự <span>Event</span></div>
+  <div class="header-sub">Tháng 5 &amp; Tháng 6 — Kéo ngang để xem toàn bộ lịch</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchMonth(5, this)">Tháng 5</div>
+  <div class="tab" onclick="switchMonth(6, this)">Tháng 6</div>
+</div>
+
+<div class="table-outer" id="tableContainer"></div>
+<div class="scroll-hint">← Kéo ngang để xem thêm →</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="summary" id="summary"></div>
+
+<!-- Add Event Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Thêm Event Mới</h3>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Brand</label>
+        <select id="mBrand"></select>
+      </div>
+      <div class="modal-field">
+        <label>Tháng</label>
+        <select id="mMonth">
+          <option value="5">Tháng 5</option>
+          <option value="6">Tháng 6</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Ngày bắt đầu</label>
+        <input type="number" id="mDateStart" min="1" max="31" placeholder="VD: 10">
+      </div>
+      <div class="modal-field">
+        <label>Ngày kết thúc</label>
+        <input type="number" id="mDateEnd" min="1" max="31" placeholder="VD: 12">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Tên Event</label>
+      <input type="text" id="mName" placeholder="VD: Brand Launch Party">
+    </div>
+    <div class="modal-field">
+      <label>Nhân sự phụ trách (cách nhau bởi dấu phẩy)</label>
+      <input type="text" id="mStaff" placeholder="VD: Minh, Linh, Hùng">
+    </div>
+    <div class="modal-field">
+      <label>Địa điểm</label>
+      <input type="text" id="mVenue" placeholder="VD: Sheraton Hà Nội">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Huỷ</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Lưu Event</button>
+    </div>
+  </div>
+</div>
+
+<button class="add-btn" onclick="openModal()" title="Thêm event mới">＋</button>
+
+<script>
+// ── BRAND CONFIG ──────────────────────────────────────────────
+const BRANDS = [
+  { name: 'Nike',       color: '#1A1410', text: '#FFFFFF' },
+  { name: 'L\'Oréal',  color: '#C0533A', text: '#FFFFFF' },
+  { name: 'Samsung',   color: '#3D4F6B', text: '#FFFFFF' },
+  { name: 'Vinamilk',  color: '#5A7A65', text: '#FFFFFF' },
+  { name: 'Grab',      color: '#2D7A4F', text: '#FFFFFF' },
+  { name: 'Highlands', color: '#8B4513', text: '#FFFFFF' },
+  { name: 'Biti\'s',   color: '#8B6B7A', text: '#FFFFFF' },
+  { name: 'VinFast',   color: '#0F4C81', text: '#FFFFFF' },
+];
+
+// ── INITIAL EVENTS ────────────────────────────────────────────
+let events = [
+  { brand: 'Nike',       month: 5, dateStart: 3,  dateEnd: 4,  name: 'Spring/Summer Launch',   staff: ['Minh', 'Linh'],         venue: 'Hanoi Club' },
+  { brand: 'Nike',       month: 5, dateStart: 18, dateEnd: 18, name: 'Run Club Activation',    staff: ['Hùng'],                  venue: 'Hồ Tây' },
+  { brand: 'L\'Oréal',  month: 5, dateStart: 9,  dateEnd: 11, name: 'Beauty Summit',           staff: ['Lan', 'Phương'],         venue: 'JW Marriott' },
+  { brand: 'L\'Oréal',  month: 6, dateStart: 5,  dateEnd: 5,  name: 'Influencer Day',          staff: ['Phương', 'Trâm'],        venue: 'Studio B9' },
+  { brand: 'Samsung',   month: 5, dateStart: 15, dateEnd: 16, name: 'Galaxy S25 Demo Day',     staff: ['Tuấn', 'An'],            venue: 'Lotte Mall' },
+  { brand: 'Samsung',   month: 6, dateStart: 20, dateEnd: 22, name: 'Tech Summit 2025',        staff: ['Tuấn', 'Khoa', 'Duy'],   venue: 'Melia Hotel' },
+  { brand: 'Vinamilk',  month: 5, dateStart: 22, dateEnd: 23, name: 'Sản phẩm mới TVC Wrap',  staff: ['Nga', 'Bình'],           venue: 'Vin Studios' },
+  { brand: 'Vinamilk',  month: 6, dateStart: 10, dateEnd: 10, name: 'Family Day',              staff: ['Nga', 'Hà'],             venue: 'Ecopark' },
+  { brand: 'Grab',      month: 5, dateStart: 8,  dateEnd: 8,  name: 'Driver Appreciation',    staff: ['Thảo'],                  venue: 'Mỹ Đình' },
+  { brand: 'Grab',      month: 6, dateStart: 1,  dateEnd: 2,  name: 'GrabMart Pop-up',         staff: ['Thảo', 'Cường'],         venue: 'Times City' },
+  { brand: 'Highlands', month: 5, dateStart: 27, dateEnd: 29, name: 'Store Anniversary',       staff: ['Mai', 'Sơn'],            venue: 'Various HN' },
+  { brand: 'Highlands', month: 6, dateStart: 15, dateEnd: 15, name: 'Summer Menu Launch',      staff: ['Mai'],                   venue: 'HL HQ' },
+  { brand: 'Biti\'s',  month: 6, dateStart: 7,  dateEnd: 9,  name: 'Heritage Collection',     staff: ['Tùng', 'Chi'],           venue: 'Vincom Phạm Ngọc Thạch' },
+  { brand: 'VinFast',  month: 5, dateStart: 12, dateEnd: 14, name: 'VF8 Test Drive Tour',     staff: ['Long', 'Hải', 'Bảo'],   venue: 'Hà Nội – Sapa' },
+  { brand: 'VinFast',  month: 6, dateStart: 25, dateEnd: 28, name: 'Electric Future Expo',    staff: ['Long', 'Khải'],          venue: 'ICE Hà Nội' },
+];
+
+// ── HELPERS ───────────────────────────────────────────────────
+function brandConfig(name) {
+  return BRANDS.find(b => b.name === name) || { color: '#999', text: '#fff' };
+}
+
+function daysInMonth(m) { return m === 5 ? 31 : 30; }
+
+function isWeekend(month, day) {
+  const d = new Date(2025, month - 1, day).getDay();
+  return d === 0 || d === 6;
+}
+
+function isToday(month, day) {
+  const now = new Date();
+  return now.getFullYear() === 2025 && now.getMonth() + 1 === month && now.getDate() === day;
+}
+
+// ── CURRENT MONTH ──────────────────────────────────────────────
+let currentMonth = 5;
+
+function switchMonth(m, el) {
+  currentMonth = m;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render() {
+  renderTable();
+  renderLegend();
+  renderSummary();
+}
+
+function renderTable() {
+  const m = currentMonth;
+  const days = daysInMonth(m);
+  const monthEvents = events.filter(e => e.month === m);
+
+  // Day columns (chunked into weeks of 7)
+  let html = `<table>`;
+
+  // Header row 1: brand label + day numbers
+  html += `<thead><tr>
+    <th>Brand / Date</th>`;
+  for (let d = 1; d <= days; d++) {
+    const we = isWeekend(m, d) ? ' style="background:#2D2520;opacity:0.75"' : '';
+    html += `<th${we}>${d}</th>`;
+  }
+  html += `</tr></thead>`;
+
+  // Body: one row per brand
+  html += `<tbody>`;
+  for (const brand of BRANDS) {
+    const bc = brandConfig(brand.name);
+    html += `<tr>
+      <td class="brand-cell">
+        <span class="brand-dot" style="background:${bc.color}"></span>
+        ${brand.name}
+      </td>`;
+
+    for (let d = 1; d <= days; d++) {
+      const we = isWeekend(m, d) ? ' weekend' : '';
+      // Events that span this day
+      const dayEvents = monthEvents.filter(e =>
+        e.brand === brand.name && d >= e.dateStart && d <= e.dateEnd
+      );
+
+      // Only show chip on START day
+      const startEvents = monthEvents.filter(e =>
+        e.brand === brand.name && d === e.dateStart
+      );
+
+      html += `<td class="day-cell${we}">`;
+
+      if (isToday(m, d) && d >= 1) {
+        html += `<div class="date-num"><span class="today-marker">${d}</span></div>`;
+      }
+
+      if (startEvents.length > 0) {
+        for (const ev of startEvents) {
+          const span = ev.dateEnd - ev.dateStart + 1;
+          const staffStr = ev.staff.join(', ');
+          html += `
+            <div class="event-chip" style="background:${bc.color};color:${bc.text};" title="${ev.name}">
+              <span class="chip-name">${ev.name}</span>
+              <span class="chip-staff">👤 ${staffStr}</span>
+              ${ev.venue ? `<span class="chip-staff">📍 ${ev.venue}</span>` : ''}
+              ${span > 1 ? `<span class="chip-staff">📅 ${span} ngày</span>` : ''}
+              <div class="tooltip">${ev.name} · ${staffStr}${ev.venue ? ' · ' + ev.venue : ''}</div>
+            </div>`;
+        }
+      } else if (dayEvents.length > 0) {
+        // continuation bar
+        const ev = dayEvents[0];
+        html += `<div style="height:4px;border-radius:2px;background:${bc.color};opacity:0.35;margin-top:6px;"></div>`;
+      }
+
+      html += `</td>`;
+    }
+    html += `</tr>`;
+  }
+
+  html += `</tbody></table>`;
+  document.getElementById('tableContainer').innerHTML = html;
+}
+
+function renderLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = `<span class="legend-label">Brands:</span>` +
+    BRANDS.map(b => `
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:${b.color}"></div>
+        ${b.name}
+      </div>`).join('');
+}
+
+function renderSummary() {
+  const el = document.getElementById('summary');
+  el.innerHTML = BRANDS.map(b => {
+    const bc = brandConfig(b.name);
+    const count = events.filter(e => e.brand === b.name).length;
+    const staffSet = new Set(events.filter(e => e.brand === b.name).flatMap(e => e.staff));
+    return `
+      <div class="summary-card">
+        <div class="summary-card-brand">${b.name}</div>
+        <div class="summary-card-count" style="color:${bc.color}">${count}</div>
+        <div class="summary-card-label">event · ${staffSet.size} nhân sự</div>
+        <div class="staff-tags">${[...staffSet].map(s => `<span class="staff-tag">${s}</span>`).join('')}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+let editIndex = null;
+
+function openModal(idx = null) {
+  editIndex = idx;
+  const sel = document.getElementById('mBrand');
+  sel.innerHTML = BRANDS.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+
+  if (idx !== null) {
+    const ev = events[idx];
+    sel.value = ev.brand;
+    document.getElementById('mMonth').value = ev.month;
+    document.getElementById('mDateStart').value = ev.dateStart;
+    document.getElementById('mDateEnd').value = ev.dateEnd;
+    document.getElementById('mName').value = ev.name;
+    document.getElementById('mStaff').value = ev.staff.join(', ');
+    document.getElementById('mVenue').value = ev.venue || '';
+    document.getElementById('modalTitle').textContent = 'Chỉnh Sửa Event';
+  } else {
+    sel.value = BRANDS[0].name;
+    document.getElementById('mMonth').value = currentMonth;
+    document.getElementById('mDateStart').value = '';
+    document.getElementById('mDateEnd').value = '';
+    document.getElementById('mName').value = '';
+    document.getElementById('mStaff').value = '';
+    document.getElementById('mVenue').value = '';
+    document.getElementById('modalTitle').textContent = 'Thêm Event Mới';
+  }
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editIndex = null;
+}
+
+function saveEvent() {
+  const ev = {
+    brand:     document.getElementById('mBrand').value,
+    month:     parseInt(document.getElementById('mMonth').value),
+    dateStart: parseInt(document.getElementById('mDateStart').value),
+    dateEnd:   parseInt(document.getElementById('mDateEnd').value),
+    name:      document.getElementById('mName').value.trim(),
+    staff:     document.getElementById('mStaff').value.split(',').map(s => s.trim()).filter(Boolean),
+    venue:     document.getElementById('mVenue').value.trim(),
+  };
+
+  if (!ev.name || !ev.dateStart || !ev.dateEnd) {
+    alert('Vui lòng điền đầy đủ thông tin!');
+    return;
+  }
+
+  if (editIndex !== null) {
+    events[editIndex] = ev;
+  } else {
+    events.push(ev);
+  }
+
+  closeModal();
+  render();
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
