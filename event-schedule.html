@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch Nhân Sự Event — Tháng 5 & 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --ink: #1A1410;
+    --gold: #C9A84C;
+    --gold-light: #E8D49A;
+    --rust: #C0533A;
+    --border: #D8CFC4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--ink); min-height: 100vh; padding: 40px 24px 60px; }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 36px; }
+  .header::before { content:''; display:block; width:60px; height:3px; background:var(--gold); margin:0 auto 20px; }
+  .header-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:12px; }
+  .header-title { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,48px); font-weight:900; line-height:1.1; }
+  .header-title span { color:var(--rust); }
+  .header-sub { margin-top:10px; font-size:13px; color:#7A6F65; }
+
+  /* TOOLBAR */
+  .toolbar { max-width:1200px; margin:0 auto 20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; }
+  .tab { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; padding:9px 24px; border:1.5px solid var(--border); border-radius:50px; cursor:pointer; background:white; color:#9A8F85; transition:all .2s; user-select:none; }
+  .tab.active, .tab:hover { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
+  .spacer { flex:1; }
+  .tool-btn { display:flex; align-items:center; gap:6px; padding:9px 18px; border-radius:50px; border:1.5px solid var(--border); background:white; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; cursor:pointer; color:var(--ink); transition:all .2s; }
+  .tool-btn:hover { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
+  .tool-btn.primary { background:var(--ink); color:var(--gold-light); border-color:var(--ink); }
+  .tool-btn.primary:hover { background:#2D2520; }
+
+  /* TABLE */
+  .table-outer { max-width:1200px; margin:0 auto; overflow-x:auto; border-radius:16px; box-shadow:0 8px 48px rgba(26,20,16,.10); border:1px solid var(--border); background:white; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead tr:first-child { background:var(--ink); }
+  thead tr:first-child th { color:var(--gold-light); font-family:'Playfair Display',serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:16px 10px; font-weight:700; text-align:left; border:none; white-space:nowrap; }
+  thead tr:first-child th:first-child { width:130px; min-width:110px; }
+  tbody tr { border-bottom:1px solid #EEE8E1; transition:background .15s; animation:fadeIn .35s ease both; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:#FDFAF6; }
+  .brand-cell { padding:14px 14px; font-weight:600; font-size:12px; white-space:nowrap; vertical-align:middle; border-right:2px solid var(--border); position:sticky; left:0; background:white; z-index:1; }
+  tbody tr:hover .brand-cell { background:#FDFAF6; }
+  .brand-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+  td.day-cell { padding:8px 6px; vertical-align:top; min-width:72px; max-width:90px; border-right:1px solid #EEE8E1; }
+  td.day-cell:last-child { border-right:none; }
+  td.weekend { background:#F9F5EE; }
+  tbody tr:hover td.weekend { background:#F5EFE5; }
+  .event-chip { display:block; border-radius:6px; padding:5px 7px; margin-bottom:3px; font-size:11px; font-weight:500; line-height:1.3; cursor:pointer; transition:opacity .15s,transform .15s; }
+  .event-chip:hover { opacity:.82; transform:translateY(-1px); }
+  .chip-name { display:block; font-weight:700; }
+  .chip-staff { display:block; font-size:10px; opacity:.75; margin-top:1px; }
+  .cont-bar { height:4px; border-radius:2px; opacity:.3; margin-top:6px; }
+
+  /* LEGEND */
+  .legend { max-width:1200px; margin:18px auto 0; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .legend-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#9A8F85; font-weight:600; margin-right:4px; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:12px; font-weight:500; }
+  .legend-swatch { width:10px; height:10px; border-radius:3px; }
+
+  /* SUMMARY */
+  .summary { max-width:1200px; margin:24px auto 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+  .summary-card { background:white; border:1px solid var(--border); border-radius:12px; padding:16px 18px; box-shadow:0 2px 12px rgba(26,20,16,.05); transition:transform .2s; }
+  .summary-card:hover { transform:translateY(-2px); }
+  .summary-card-brand { font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:#9A8F85; }
+  .summary-card-count { font-family:'Playfair Display',serif; font-size:34px; font-weight:900; line-height:1; }
+  .summary-card-label { font-size:12px; color:#7A6F65; margin-bottom:8px; }
+  .staff-tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .staff-tag { background:#F0EBE4; border-radius:50px; padding:2px 9px; font-size:11px; font-weight:500; }
+  .scroll-hint { text-align:center; font-size:11px; color:#B0A89F; margin-top:8px; letter-spacing:1px; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,20,16,.55); z-index:100; align-items:center; justify-content:center; padding:16px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:white; border-radius:20px; padding:32px 28px; width:480px; max-width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 24px 80px rgba(26,20,16,.25); animation:slideUp .28s ease; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+  .modal h3 { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; margin-bottom:22px; }
+  .modal-field { margin-bottom:14px; }
+  .modal-field label { display:block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; font-weight:600; color:#9A8F85; margin-bottom:5px; }
+  .modal-field input, .modal-field select { width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--ink); background:var(--cream); outline:none; transition:border-color .2s; }
+  .modal-field input:focus, .modal-field select:focus { border-color:var(--gold); }
+  .modal-row { display:flex; gap:10px; }
+  .modal-row .modal-field { flex:1; }
+  .modal-actions { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:11px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-primary { background:var(--ink); color:var(--gold-light); }
+  .btn-primary:hover { background:#2D2520; }
+  .btn-secondary { background:#F0EBE4; color:var(--ink); }
+  .btn-secondary:hover { background:#E5DDD5; }
+  .btn-danger { background:#FDE8E4; color:var(--rust); }
+  .btn-danger:hover { background:#F9D0C8; }
+
+  /* SETTINGS */
+  .settings-section { margin-bottom:24px; }
+  .settings-section h4 { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#9A8F85; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .item-list { display:flex; flex-direction:column; gap:7px; margin-bottom:12px; }
+  .item-row { display:flex; align-items:center; gap:8px; background:#F7F3EE; border-radius:8px; padding:8px 12px; }
+  .item-color { width:22px; height:22px; border-radius:5px; cursor:pointer; border:2px solid rgba(0,0,0,.1); padding:1px; flex-shrink:0; }
+  .item-name { flex:1; font-size:13px; font-weight:500; }
+  .item-del { background:none; border:none; color:#C0A899; font-size:15px; cursor:pointer; padding:0 2px; line-height:1; transition:color .2s; }
+  .item-del:hover { color:var(--rust); }
+  .add-item-row { display:flex; gap:8px; }
+  .add-item-row input[type=text] { flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; background:white; outline:none; }
+  .add-item-row input[type=text]:focus { border-color:var(--gold); }
+  .add-item-row input[type=color] { width:40px; padding:3px; border:1.5px solid var(--border); border-radius:8px; cursor:pointer; background:white; }
+  .add-item-row button { padding:9px 16px; border-radius:8px; border:none; background:var(--ink); color:var(--gold-light); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .add-item-row button:hover { background:#2D2520; }
+  .empty-state { text-align:center; color:#B0A899; font-size:12px; padding:12px; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+  @media(max-width:600px){ body{padding:20px 10px 60px;} .modal{padding:22px 16px;} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Agency Event Schedule</div>
+  <div class="header-title">Lịch Nhân Sự <span>Event</span></div>
+  <div class="header-sub">Tháng 5 &amp; Tháng 6 · Kéo ngang để xem toàn bộ lịch</div>
+</div>
+
+<div class="toolbar">
+  <div class="tabs">
+    <div class="tab active" onclick="switchMonth(5,this)">Tháng 5</div>
+    <div class="tab" onclick="switchMonth(6,this)">Tháng 6</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="tool-btn" onclick="openSettings()">⚙️ Brand &amp; Nhân sự</button>
+  <button class="tool-btn primary" onclick="openEventModal(null)">＋ Thêm Event</button>
+</div>
+
+<div class="table-outer" id="tableContainer"></div>
+<div class="scroll-hint">← Kéo ngang để xem thêm →</div>
+<div class="legend" id="legend"></div>
+<div class="summary" id="summary"></div>
+
+<!-- EVENT MODAL -->
+<div class="modal-overlay" id="eventOverlay">
+  <div class="modal">
+    <h3 id="eventModalTitle">Thêm Event Mới</h3>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Brand</label>
+        <select id="mBrand"></select>
+      </div>
+      <div class="modal-field">
+        <label>Tháng</label>
+        <select id="mMonth">
+          <option value="5">Tháng 5</option>
+          <option value="6">Tháng 6</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Ngày bắt đầu</label>
+        <input type="number" id="mDateStart" min="1" max="31" placeholder="VD: 10">
+      </div>
+      <div class="modal-field">
+        <label>Ngày kết thúc</label>
+        <input type="number" id="mDateEnd" min="1" max="31" placeholder="VD: 12">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Tên Event</label>
+      <input type="text" id="mName" placeholder="VD: Brand Launch Party">
+    </div>
+    <div class="modal-field">
+      <label>Nhân sự phụ trách <span style="font-size:10px;color:#aaa;text-transform:none;letter-spacing:0">(Ctrl/Cmd để chọn nhiều)</span></label>
+      <select id="mStaffSelect" multiple style="height:100px;"></select>
+    </div>
+    <div class="modal-field">
+      <label>Địa điểm</label>
+      <input type="text" id="mVenue" placeholder="VD: Sheraton Hà Nội">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeEventModal()">Huỷ</button>
+      <button class="btn btn-danger" id="btnDeleteEvent" onclick="deleteEvent()" style="display:none">Xoá Event</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal">
+    <h3>⚙️ Brand &amp; Nhân sự</h3>
+
+    <div class="settings-section">
+      <h4>Danh sách Brand</h4>
+      <div class="item-list" id="brandList"></div>
+      <div class="add-item-row">
+        <input type="color" id="newBrandColor" value="#C0533A">
+        <input type="text" id="newBrandName" placeholder="Tên brand mới...">
+        <button onclick="addBrand()">+ Thêm</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h4>Danh sách Nhân sự</h4>
+      <div class="item-list" id="staffListEl"></div>
+      <div class="add-item-row">
+        <input type="text" id="newStaffName" placeholder="Tên nhân sự mới...">
+        <button onclick="addStaff()">+ Thêm</button>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="closeSettings()">Xong</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────────
+let brands = [];
+let staffList = [];
+let events = [];
+let currentMonth = 5;
+let editEventIdx = null;
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function brandCfg(name){ return brands.find(b=>b.name===name)||{color:'#999'}; }
+function daysInMonth(m){ return m===5?31:30; }
+function isWeekend(m,d){ const w=new Date(2025,m-1,d).getDay(); return w===0||w===6; }
+
+function switchMonth(m,el){
+  currentMonth=m;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ── RENDER ───────────────────────────────────────────────────────
+function render(){ renderTable(); renderLegend(); renderSummary(); }
+
+function renderTable(){
+  const m=currentMonth, days=daysInMonth(m);
+  const mEvs=events.filter(e=>e.month===m);
+
+  if(brands.length===0){
+    document.getElementById('tableContainer').innerHTML=
+      `<div style="padding:48px;text-align:center;color:#9A8F85;font-size:14px;">
+        Chưa có brand nào. Nhấn <strong>⚙️ Brand & Nhân sự</strong> để thêm brand trước nhé!
+      </div>`;
+    return;
+  }
+
+  let html=`<table><thead><tr><th>Brand / Ngày</th>`;
+  for(let d=1;d<=days;d++){
+    const we=isWeekend(m,d)?'style="background:#232020;opacity:.7"':'';
+    html+=`<th ${we}>${d}</th>`;
+  }
+  html+=`</tr></thead><tbody>`;
+
+  for(const brand of brands){
+    const bc=brandCfg(brand.name);
+    html+=`<tr><td class="brand-cell"><span class="brand-dot" style="background:${bc.color}"></span>${brand.name}</td>`;
+    for(let d=1;d<=days;d++){
+      const we=isWeekend(m,d)?' weekend':'';
+      const startEvs=mEvs.filter(e=>e.brand===brand.name&&d===e.dateStart);
+      const contEvs=mEvs.filter(e=>e.brand===brand.name&&d>e.dateStart&&d<=e.dateEnd);
+      html+=`<td class="day-cell${we}">`;
+      if(startEvs.length){
+        startEvs.forEach(ev=>{
+          const idx=events.indexOf(ev);
+          const span=ev.dateEnd-ev.dateStart+1;
+          html+=`<div class="event-chip" style="background:${bc.color};color:#fff" onclick="openEventModal(${idx})">
+            <span class="chip-name">${ev.name}</span>
+            ${ev.staff&&ev.staff.length?`<span class="chip-staff">👤 ${ev.staff.join(', ')}</span>`:''}
+            ${ev.venue?`<span class="chip-staff">📍 ${ev.venue}</span>`:''}
+            ${span>1?`<span class="chip-staff">📅 ${span} ngày</span>`:''}
+          </div>`;
+        });
+      } else if(contEvs.length){
+        html+=`<div class="cont-bar" style="background:${contEvs[0]?bc.color:'#999'}"></div>`;
+      }
+      html+=`</td>`;
+    }
+    html+=`</tr>`;
+  }
+  html+=`</tbody></table>`;
+  document.getElementById('tableContainer').innerHTML=html;
+}
+
+function renderLegend(){
+  document.getElementById('legend').innerHTML= brands.length
+    ? `<span class="legend-label">Brands:</span>`+brands.map(b=>`<div class="legend-item"><div class="legend-swatch" style="background:${b.color}"></div>${b.name}</div>`).join('')
+    : '';
+}
+
+function renderSummary(){
+  document.getElementById('summary').innerHTML=brands.map(b=>{
+    const bc=brandCfg(b.name);
+    const cnt=events.filter(e=>e.brand===b.name).length;
+    const ppl=new Set(events.filter(e=>e.brand===b.name).flatMap(e=>e.staff||[]));
+    return `<div class="summary-card">
+      <div class="summary-card-brand">${b.name}</div>
+      <div class="summary-card-count" style="color:${bc.color}">${cnt}</div>
+      <div class="summary-card-label">event · ${ppl.size} nhân sự</div>
+      <div class="staff-tags">${[...ppl].map(s=>`<span class="staff-tag">${s}</span>`).join('')||'<span style="font-size:11px;color:#aaa">Chưa có</span>'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── EVENT MODAL ──────────────────────────────────────────────────
+function openEventModal(idx){
+  editEventIdx = idx;
+  const brandSel=document.getElementById('mBrand');
+  brandSel.innerHTML=brands.map(b=>`<option value="${b.name}">${b.name}</option>`).join('');
+
+  const ss=document.getElementById('mStaffSelect');
+  ss.innerHTML=staffList.length
+    ? staffList.map(s=>`<option value="${s}">${s}</option>`).join('')
+    : `<option disabled>Chưa có nhân sự — thêm trong ⚙️ trước nhé</option>`;
+
+  if(idx!==null&&idx!==undefined){
+    const ev=events[idx];
+    brandSel.value=ev.brand;
+    document.getElementById('mMonth').value=ev.month;
+    document.getElementById('mDateStart').value=ev.dateStart;
+    document.getElementById('mDateEnd').value=ev.dateEnd;
+    document.getElementById('mName').value=ev.name;
+    document.getElementById('mVenue').value=ev.venue||'';
+    Array.from(ss.options).forEach(o=>{ o.selected=(ev.staff||[]).includes(o.value); });
+    document.getElementById('eventModalTitle').textContent='Chỉnh Sửa Event';
+    document.getElementById('btnDeleteEvent').style.display='';
+  } else {
+    if(brands.length) brandSel.value=brands[0].name;
+    document.getElementById('mMonth').value=currentMonth;
+    document.getElementById('mDateStart').value='';
+    document.getElementById('mDateEnd').value='';
+    document.getElementById('mName').value='';
+    document.getElementById('mVenue').value='';
+    Array.from(ss.options).forEach(o=>o.selected=false);
+    document.getElementById('eventModalTitle').textContent='Thêm Event Mới';
+    document.getElementById('btnDeleteEvent').style.display='none';
+  }
+  document.getElementById('eventOverlay').classList.add('open');
+}
+
+function closeEventModal(){ document.getElementById('eventOverlay').classList.remove('open'); editEventIdx=null; }
+
+function saveEvent(){
+  if(!brands.length){ alert('Thêm brand trước nhé!'); return; }
+  const ss=document.getElementById('mStaffSelect');
+  const ev={
+    brand: document.getElementById('mBrand').value,
+    month: parseInt(document.getElementById('mMonth').value),
+    dateStart: parseInt(document.getElementById('mDateStart').value),
+    dateEnd: parseInt(document.getElementById('mDateEnd').value),
+    name: document.getElementById('mName').value.trim(),
+    staff: Array.from(ss.selectedOptions).map(o=>o.value),
+    venue: document.getElementById('mVenue').value.trim(),
+  };
+  if(!ev.name){ alert('Điền tên event nhé!'); return; }
+  if(!ev.dateStart||!ev.dateEnd){ alert('Điền ngày bắt đầu và kết thúc nhé!'); return; }
+  if(ev.dateEnd<ev.dateStart){ alert('Ngày kết thúc phải >= ngày bắt đầu!'); return; }
+  if(editEventIdx!==null&&editEventIdx!==undefined) events[editEventIdx]=ev; else events.push(ev);
+  closeEventModal(); render();
+}
+
+function deleteEvent(){
+  if(!confirm('Xoá event này?')) return;
+  events.splice(editEventIdx,1);
+  closeEventModal(); render();
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────
+function openSettings(){ renderBrandList(); renderStaffListEl(); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings(){ document.getElementById('settingsOverlay').classList.remove('open'); render(); }
+
+function renderBrandList(){
+  const el=document.getElementById('brandList');
+  if(!brands.length){ el.innerHTML=`<div class="empty-state">Chưa có brand nào</div>`; return; }
+  el.innerHTML=brands.map((b,i)=>`
+    <div class="item-row">
+      <input type="color" class="item-color" value="${b.color}" onchange="brands[${i}].color=this.value;renderBrandList();render()">
+      <span class="item-name">${b.name}</span>
+      <button class="item-del" onclick="deleteBrand(${i})">✕</button>
+    </div>`).join('');
+}
+
+function renderStaffListEl(){
+  const el=document.getElementById('staffListEl');
+  if(!staffList.length){ el.innerHTML=`<div class="empty-state">Chưa có nhân sự nào</div>`; return; }
+  el.innerHTML=staffList.map((s,i)=>`
+    <div class="item-row">
+      <span class="item-name">👤 ${s}</span>
+      <button class="item-del" onclick="deleteStaff(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addBrand(){
+  const name=document.getElementById('newBrandName').value.trim();
+  const color=document.getElementById('newBrandColor').value;
+  if(!name){ alert('Nhập tên brand nhé!'); return; }
+  if(brands.find(b=>b.name===name)){ alert('Brand này đã có rồi!'); return; }
+  brands.push({name,color});
+  document.getElementById('newBrandName').value='';
+  renderBrandList();
+}
+
+function deleteBrand(i){
+  if(!confirm(`Xoá brand "${brands[i].name}"? Các event thuộc brand này cũng bị xoá.`)) return;
+  const name=brands[i].name;
+  brands.splice(i,1);
+  events=events.filter(e=>e.brand!==name);
+  renderBrandList();
+}
+
+function addStaff(){
+  const name=document.getElementById('newStaffName').value.trim();
+  if(!name){ alert('Nhập tên nhân sự nhé!'); return; }
+  if(staffList.includes(name)){ alert('Nhân sự này đã có rồi!'); return; }
+  staffList.push(name);
+  document.getElementById('newStaffName').value='';
+  renderStaffListEl();
+}
+
+function deleteStaff(i){
+  const name=staffList[i];
+  if(!confirm(`Xoá "${name}" khỏi danh sách?`)) return;
+  staffList.splice(i,1);
+  events.forEach(e=>{ if(e.staff) e.staff=e.staff.filter(s=>s!==name); });
+  renderStaffListEl();
+}
+
+// close overlays on bg click
+document.getElementById('eventOverlay').addEventListener('click',function(e){ if(e.target===this) closeEventModal(); });
+document.getElementById('settingsOverlay').addEventListener('click',function(e){ if(e.target===this) closeSettings(); });
+document.getElementById('newBrandName').addEventListener('keydown',e=>{ if(e.key==='Enter') addBrand(); });
+document.getElementById('newStaffName').addEventListener('keydown',e=>{ if(e.key==='Enter') addStaff(); });
+
+// INIT — start clean, let user fill in their own data
+render();
+</script>
+</body>
+</html>
